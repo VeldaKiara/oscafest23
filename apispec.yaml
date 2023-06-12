@@ -1,0 +1,295 @@
+openapi: 3.0.0
+info:
+  title: OSCA Fest Merch
+  version: 1.0.0
+  description: This is a test API for managing OSCA Merch to demo how to create an API spec with atleast one endpoint. which is merchandise.v
+
+paths:
+  /merchandises:
+    get:
+      summary: Get all merchandises
+      operationId: getMerchandises
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Merchandise'
+    post:
+      summary: Create a new merchandise
+      operationId: createMerchandise
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Merchandise'
+      responses:
+        '201':
+          description: Merchandise created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Merchandise'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                bad_request:
+                  value:
+                    message: "The request body is invalid."
+                    code: 400
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                unauthorized:
+                  value:
+                    message: "The user is not authorized to access this resource."
+                    code: 401
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                internal_server_error:
+                  value:
+                    message: "An unexpected error occurred while processing the request."
+                    code: 500
+
+  /merchandise/{id}:
+    get:
+      summary: Get a merchandise by ID
+      operationId: getMerchandiseById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Merchandise'
+        '404':
+          description: merchandise not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                internal_server_error:
+                  value:
+                    message: "merchandise not found."
+                    code: 400
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                internal_server_error:
+                  value:
+                    message: "An unexpected error occurred while processing the request."
+                    code: 500
+    put:
+      summary: Update a merchandise by ID
+      operationId: updateMerchandiseById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Merchandise'
+      responses:
+        '200':
+          description: Merchandise updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Merchandise'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                internal_server_error:
+                  value:
+                    message: "Bad request."
+                    code: 400
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                internal_server_error:
+                  value:
+                    message: "Unauthorized."
+                    code: 401
+          
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                internal_server_error:
+                  value:
+                    message: "Access is forbidden."
+                    code: 403
+           
+        '404':
+          description: Merchandise not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                internal_server_error:
+                  value:
+                    message: "merchandise not found."
+                    code: 404
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                internal_server_error:
+                  value:
+                    message: "An unexpected error occurred while processing the request."
+                    code: 500
+    delete:
+      summary: Delete a merchandise by ID
+      operationId: deleteMerchandiseById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: Merchandise deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                internal_server_error:
+                  value:
+                    message: "Merchandise has been deleted."
+                    code: 204
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                internal_server_error:
+                  value:
+                    message: "Unauthorized to view resource"
+                    code: 401
+    
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                internal_server_error:
+                  value:
+                    message: "Access is forbidden."
+                    code: 403
+           
+        '404':
+          description: Merchandise not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                internal_server_error:
+                  value:
+                    message: "merchandise not found."
+                    code: 404
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                internal_server_error:
+                  value:
+                    message: "An unexpected error occurred while processing the request."
+                    code: 500
+
+components:
+  schemas:
+    Merchandise:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        price:
+          type: number
+        description:
+          type: string
+      example:
+        - id: 1
+          name: "Merchandise 1"
+          price: 9.99
+          description: "Example description for Merchandise 1"
+        - id: 2
+          name: "Mmerchandise 2"
+          price: 19.99
+          description: "Example description for Merchandise 2"
+    Error:
+      type: object
+      description: Represents an HTTP error
+      properties:
+        error_code:
+          type: number
+        message:
+          type: string
+        docs:
+          type: string
+servers:
+  # Added by API Auto Mocking Plugin
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/veldakarimi/oscafest23/1.0.0
